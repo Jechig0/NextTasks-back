@@ -43,7 +43,7 @@ public class Tasks {
 
     @ManyToOne
     @JoinColumn(name = "table_id", nullable = false)
-    private Table table;
+    private NTable table;
 
     @ManyToMany
     // JPA crea la tabla intermedia automaticamente

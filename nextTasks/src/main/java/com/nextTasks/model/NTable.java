@@ -22,7 +22,7 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode
 @ToString
 @Entity
-public class Table {
+public class NTable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

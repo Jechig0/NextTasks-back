@@ -25,22 +25,13 @@ public class TagService {
     @Autowired
     private UserRepository userRepository;
 
-    // Obtener todos los tags
-    public List<Tag> getAllTags() {
-        return tagRepository.findAll();
-    }
-
+    
     // Obtener tags por owner ID
     public List<Tag> getTagsByOwnerId(Long ownerId) {
         return tagRepository.findByOwnerId(ownerId);
     }
 
-    // Obtener tags por owner
-    public List<Tag> getTagsByOwner(User owner) {
-        return tagRepository.findByOwner(owner);
-    }
-
-    // Obtener tag por ID
+        // Obtener tag por ID
     public Tag getTagById(Long id) {
         return tagRepository.findById(id)
             .orElseThrow(() -> new TagNotFoundException("Tag not found with id: " + id));
@@ -95,9 +86,5 @@ public class TagService {
         tagRepository.delete(tag);
     }
 
-    // Buscar tag por nombre
-    public Tag getTagByName(String name) {
-        return tagRepository.findByName(name)
-            .orElseThrow(() -> new TagNotFoundException("Tag not found with name: " + name));
-    }
+    
 }

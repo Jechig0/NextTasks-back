@@ -66,7 +66,6 @@ public class TaskService {
 
         task.setTitle(newTask.getTitle());
         task.setDescription(newTask.getDescription());
-        task.setStatus(newTask.getStatus());
         task.setDueDate(newTask.getDueDate());
         task.setPriority(newTask.getPriority());
         task.setCompletionDate(newTask.getCompletionDate());

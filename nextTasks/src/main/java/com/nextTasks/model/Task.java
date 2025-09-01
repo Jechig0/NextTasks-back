@@ -34,7 +34,6 @@ public class Task {
 
     private String title;
     private String description;
-    private String status;
 
     private LocalDate creationDate;
     private LocalDate dueDate;
@@ -47,6 +46,6 @@ public class Task {
 
     @ManyToMany
     // JPA crea la tabla intermedia automaticamente
-    private List<Tags> tags;
+    private List<Tag> tags;
 
 }

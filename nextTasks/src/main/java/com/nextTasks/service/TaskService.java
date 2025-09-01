@@ -27,7 +27,7 @@ public class TaskService {
     private BoardRepository boardRepository;
 
     public List<Task> getTasksByTable(Long tableroId) {
-        return taskRepository.findByTableId(tableroId);
+        return taskRepository.findByBoardId(tableroId);
     }
 
     public Task getTaskById(Long id) {
@@ -37,16 +37,16 @@ public class TaskService {
 
     public Task createTask(Task task) {
         // Comprobamos si existe el task a crear
-        taskRepository.findByTableAndTitle(task.getTable(), task.getTitle())
+        taskRepository.findByBoardIdAndTitle(task.getBoard().getId(), task.getTitle())
             .ifPresent( t -> {
                 throw new TaskExistException(t.getTitle());
             });
 
         // Hay que comprobar si existe el tablero
-        Board t = boardRepository.findById(task.getTable().getId())
+        Board t = boardRepository.findById(task.getBoard().getId())
             .orElseThrow(TableNotFoundException::new);
 
-        task.setTable(t);
+        task.setBoard(t);
         task.setCreationDate(LocalDate.now());
 
         return taskRepository.save(task);
@@ -57,7 +57,7 @@ public class TaskService {
         Task task = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
 
 
-        taskRepository.findByTableAndTitle(task.getTable(), task.getTitle())
+        taskRepository.findByBoardAndTitle(task.getBoard(), task.getTitle())
             .ifPresent( t -> {
                 if(!t.getId().equals(id)) {
                     throw new TaskExistException(t.getTitle());

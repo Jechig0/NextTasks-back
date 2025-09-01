@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nextTasks.DTO.ErrorResponseDTO;
@@ -21,7 +22,9 @@ import com.nextTasks.exception.TaskNotFoundException;
 import com.nextTasks.model.Task;
 import com.nextTasks.service.TaskService;
 
-@RestController("/tasks")
+
+@RestController
+@RequestMapping("/tasks")
 public class TaskController {
 
     @Autowired

@@ -15,14 +15,16 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     // Metodos de ejemplo
     
     // Buscar tareas por tabla
-    List<Task> findByTable(Board NTable);
+    List<Task> findByBoard(Board board);
 
     // Buscar tareas por ID de tabla
-    List<Task> findByTableId(Long NTableId);
-
-    Optional<Task> findByTableAndTitle(Board table, String title);
+    List<Task> findByBoardId(Long boardId);
 
     long countByCompletionDateNotNull();
+
+    Optional<Task> findByBoardAndTitle(Board board, String title);
+
+    Optional<Task> findByBoardIdAndTitle(Long id, String title);
 
     
 

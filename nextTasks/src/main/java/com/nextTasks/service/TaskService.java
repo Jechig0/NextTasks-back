@@ -11,6 +11,7 @@ import com.nextTasks.exception.TaskExistException;
 import com.nextTasks.exception.TaskNotFoundException;
 import com.nextTasks.model.Board;
 import com.nextTasks.model.Task;
+import com.nextTasks.model.Tag;
 import com.nextTasks.repository.BoardRepository;
 import com.nextTasks.repository.TaskRepository;
 
@@ -25,6 +26,9 @@ public class TaskService {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired 
+    private TagService tagService;
 
     public List<Task> getTasksByTable(Long tableroId) {
         return taskRepository.findByBoardId(tableroId);
@@ -46,12 +50,40 @@ public class TaskService {
         Board t = boardRepository.findById(task.getBoard().getId())
             .orElseThrow(TableNotFoundException::new);
 
+        // Validar tags - solo mantener los que existen
+        if (task.getTags() != null) {
+            List<Tag> validatedTags = task.getTags().stream()
+                .map(tag -> {
+                    try {
+                        return tagService.getTagById(tag.getId());
+                    } catch (Exception e) {
+                        return null; // Tag no existe, retornar null
+                    }
+                })
+                .filter(tag -> tag != null) // Filtrar solo los tags válidos
+                .toList(); 
+            task.setTags(validatedTags);
+        }
         task.setBoard(t);
         task.setCreationDate(LocalDate.now());
 
         return taskRepository.save(task);
     }
 
+
+    public void addTagToTask(Long taskId, Long tagId) {
+        Task task = taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
+        Tag tag = tagService.getTagById(tagId);
+        task.getTags().add(tag);
+        taskRepository.save(task);
+    }
+
+    public void removeTagFromTask(Long taskId, Long tagId) {
+        Task task = taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
+        Tag tag = tagService.getTagById(tagId);
+        task.getTags().remove(tag);
+        taskRepository.save(task);
+    }
 
     public Task updateTask(Long id, Task newTask) {
         Task task = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
@@ -69,7 +101,21 @@ public class TaskService {
         task.setDueDate(newTask.getDueDate());
         task.setPriority(newTask.getPriority());
         task.setCompletionDate(newTask.getCompletionDate());
-        task.setTags(newTask.getTags());
+        
+        // Validar tags - solo mantener los que existen
+        if (newTask.getTags() != null) {
+            List<Tag> validatedTags = newTask.getTags().stream()
+                .map(tag -> {
+                    try {
+                        return tagService.getTagById(tag.getId());
+                    } catch (Exception e) {
+                        return null; // Tag no existe, retornar null
+                    }
+                })
+                .filter(tag -> tag != null) // Filtrar solo los tags válidos
+                .toList();
+            task.setTags(validatedTags);
+        }
 
         return taskRepository.save(task);
     }

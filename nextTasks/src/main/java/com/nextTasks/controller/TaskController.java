@@ -118,4 +118,32 @@ public class TaskController {
         }
     }
 
+    @PatchMapping("/{id}/addTag/{idTag}")
+    public ResponseEntity<?> addTagToTask(@PathVariable Long id, @PathVariable Long idTag) {
+        try {
+            taskService.addTagToTask(id, idTag);
+            return ResponseEntity.ok().build();
+        } catch (TaskNotFoundException e) {
+            ErrorResponseDTO error = new ErrorResponseDTO("Task not found", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        } catch (Exception e) {
+            ErrorResponseDTO error = new ErrorResponseDTO("Error adding tag to task", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
+    @PatchMapping("/{id}/removeTag/{idTag}")
+    public ResponseEntity<?> removeTagFromTask(@PathVariable Long id, @PathVariable Long idTag) {
+        try {
+            taskService.removeTagFromTask(id, idTag);
+            return ResponseEntity.ok().build();
+        } catch (TaskNotFoundException e) {
+            ErrorResponseDTO error = new ErrorResponseDTO("Task not found", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        } catch (Exception e) {
+            ErrorResponseDTO error = new ErrorResponseDTO("Error adding tag to task", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
 }

@@ -1,7 +1,7 @@
 package com.nextTasks.repository;
 
 import com.nextTasks.model.Task;
-import com.nextTasks.model.Board;
+import com.nextTasks.model.Column;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,16 +15,16 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     // Metodos de ejemplo
     
     // Buscar tareas por tabla
-    List<Task> findByBoard(Board board);
+    List<Task> findByColumn(Column column);
 
     // Buscar tareas por ID de tabla
-    List<Task> findByBoardId(Long boardId);
+    List<Task> findByColumnId(Long columnId);
 
     long countByCompletionDateNotNull();
 
-    Optional<Task> findByBoardAndTitle(Board board, String title);
+    Optional<Task> findByColumnAndTitle(Column column, String title);
 
-    Optional<Task> findByBoardIdAndTitle(Long id, String title);
+    Optional<Task> findByColumnIdAndTitle(Long id, String title);
 
     
 

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nextTasks.DTO.ErrorResponseDTO;
-import com.nextTasks.exception.TableNotFoundException;
+import com.nextTasks.exception.ColumnNotFoundException;
 import com.nextTasks.exception.TaskExistException;
 import com.nextTasks.exception.TaskNotFoundException;
 import com.nextTasks.model.Task;
@@ -31,10 +31,10 @@ public class TaskController {
     private TaskService taskService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getTasksFromTable(@PathVariable Long id) {
+    public ResponseEntity<?> getTasksFromColumn(@PathVariable Long id) {
         try {
 
-            return ResponseEntity.ok(taskService.getTasksByTable(id));
+            return ResponseEntity.ok(taskService.getTasksByColumn(id));
         } catch (Exception e) {
             ErrorResponseDTO error = new ErrorResponseDTO("Error fetching tasks", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
@@ -64,8 +64,8 @@ public class TaskController {
         } catch (TaskExistException e) {
             ErrorResponseDTO error = new ErrorResponseDTO("Task already exists", e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
-        } catch (TableNotFoundException e) {
-            ErrorResponseDTO error = new ErrorResponseDTO("Table not found", e.getMessage());
+        } catch (ColumnNotFoundException e) {
+            ErrorResponseDTO error = new ErrorResponseDTO("Column not found", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         } catch (Exception e) {
             ErrorResponseDTO error = new ErrorResponseDTO("Error creating task", e.getMessage());

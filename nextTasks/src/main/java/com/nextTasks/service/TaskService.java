@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nextTasks.exception.TableNotFoundException;
+import com.nextTasks.exception.ColumnNotFoundException;
 import com.nextTasks.exception.TaskExistException;
 import com.nextTasks.exception.TaskNotFoundException;
-import com.nextTasks.model.Board;
+import com.nextTasks.model.Column;
 import com.nextTasks.model.Task;
 import com.nextTasks.model.Tag;
-import com.nextTasks.repository.BoardRepository;
+import com.nextTasks.repository.ColumnRepository;
 import com.nextTasks.repository.TaskRepository;
 
 import jakarta.transaction.Transactional;
@@ -25,13 +25,13 @@ public class TaskService {
     private TaskRepository taskRepository;
 
     @Autowired
-    private BoardRepository boardRepository;
+    private ColumnRepository columnRepository;
 
     @Autowired 
     private TagService tagService;
 
-    public List<Task> getTasksByTable(Long tableroId) {
-        return taskRepository.findByBoardId(tableroId);
+    public List<Task> getTasksByColumn(Long columnId) {
+        return taskRepository.findByColumnId(columnId);
     }
 
     public Task getTaskById(Long id) {
@@ -41,14 +41,14 @@ public class TaskService {
 
     public Task createTask(Task task) {
         // Comprobamos si existe el task a crear
-        taskRepository.findByBoardIdAndTitle(task.getBoard().getId(), task.getTitle())
+        taskRepository.findByColumnIdAndTitle(task.getColumn().getId(), task.getTitle())
             .ifPresent( t -> {
                 throw new TaskExistException(t.getTitle());
             });
 
         // Hay que comprobar si existe el tablero
-        Board t = boardRepository.findById(task.getBoard().getId())
-            .orElseThrow(TableNotFoundException::new);
+        Column column = columnRepository.findById(task.getColumn().getId())
+            .orElseThrow(ColumnNotFoundException::new);
 
         // Validar tags - solo mantener los que existen
         if (task.getTags() != null) {
@@ -64,7 +64,7 @@ public class TaskService {
                 .toList(); 
             task.setTags(validatedTags);
         }
-        task.setBoard(t);
+        task.setColumn(column);
         task.setCreationDate(LocalDate.now());
 
         return taskRepository.save(task);
@@ -89,7 +89,7 @@ public class TaskService {
         Task task = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
 
 
-        taskRepository.findByBoardAndTitle(task.getBoard(), task.getTitle())
+        taskRepository.findByColumnAndTitle(task.getColumn(), task.getTitle())
             .ifPresent( t -> {
                 if(!t.getId().equals(id)) {
                     throw new TaskExistException(t.getTitle());

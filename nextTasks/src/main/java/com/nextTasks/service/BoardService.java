@@ -29,13 +29,13 @@ public class BoardService {
     }
 
     public Board getBoardById(Long id) {
-        return boardRepository.findById(id).orElse(null);
+        return boardRepository.findById(id).orElseThrow(() -> new BoardNotFoundException("Board not found with id: " + id));
     }
 
     public Board createBoard(Board board){
-        if (boardRepository.findById(board.getId()).isPresent()) {
-            throw new BoardExistentException("Board already exists with id: " + board.getId());
-        }
+        // if (boardRepository.findById(board.getId()).isPresent()) {
+        //     throw new BoardExistentException("Board already exists with id: " + board.getId());
+        // }
 
         if(board.getOwner() != null && board.getOwner().getId() != null){
             // Lazy loading - Cargar el owner completo desde la base de datos

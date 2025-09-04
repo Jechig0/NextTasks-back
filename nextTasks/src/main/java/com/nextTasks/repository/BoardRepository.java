@@ -19,7 +19,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     // Buscar tablas por nombre (contiene texto)
     List<Board> findByNameContainingIgnoreCase(String name);
 
-    Board findbyId(Long id);
-
 
 }

@@ -41,7 +41,7 @@ public class Task {
     private LocalDate completionDate;
 
     @ManyToOne
-    @JoinColumn(name = "table_id", nullable = false)
+    @JoinColumn(name = "column_id", nullable = false)
     private Column column;
 
     @ManyToMany

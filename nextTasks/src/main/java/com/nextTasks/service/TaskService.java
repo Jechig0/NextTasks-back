@@ -131,5 +131,23 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
+    public Task updateColumnTask(Long id, Long idColumn) {
+        Task task = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
+        Column column = columnRepository.findById(idColumn).orElseThrow(ColumnNotFoundException::new);
+
+        taskRepository.findByColumnAndTitle(column, task.getTitle())
+            .ifPresent( t -> {
+                if(!t.getId().equals(id)) {
+                    throw new TaskExistException(t.getTitle());
+                }
+            });
+
+
+        task.setColumn(column);
+
+
+        return taskRepository.save(task);
+    }
+
 
 }

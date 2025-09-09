@@ -24,5 +24,4 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     Optional<Board> findByIdAndActive(Long id, Boolean active);
 
-
 }

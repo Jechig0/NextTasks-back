@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
@@ -18,6 +19,10 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     // Buscar tablas por nombre (contiene texto)
     List<Board> findByNameContainingIgnoreCase(String name);
+
+    List<Board> findByOwnerIdAndActive(Long id, Boolean active);
+
+    Optional<Board> findByIdAndActive(Long id, Boolean active);
 
 
 }

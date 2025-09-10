@@ -86,7 +86,9 @@ public class TaskService {
     }
 
     public Task updateTask(Long id, Task newTask) {
+        
         Task task = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
+        
 
 
         taskRepository.findByColumnAndTitle(task.getColumn(), task.getTitle())

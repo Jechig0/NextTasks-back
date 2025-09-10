@@ -20,7 +20,7 @@ public class DashBoardController {
     @GetMapping()
     public ResponseEntity<?> getTasksCount() {
         try {
-            DashBoardDataDTO data = dashBoardService.getData();
+            DashBoardDataDTO data = dashBoardService.getDashBoardData();
             return ResponseEntity.ok(data);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching tasks count");

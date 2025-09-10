@@ -22,7 +22,6 @@ import com.nextTasks.exception.TaskNotFoundException;
 import com.nextTasks.model.Task;
 import com.nextTasks.service.TaskService;
 
-
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
@@ -76,6 +75,7 @@ public class TaskController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody Task task) {
         try {
+            
             Task updatedTask = taskService.updateTask(id, task);
             return ResponseEntity.ok(updatedTask);
         } catch (TaskNotFoundException e) {
@@ -89,7 +89,6 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
         }
     }
-
 
     @PutMapping("/{id}/column/{idColumn}")
     public ResponseEntity<?> updateColumnTask(@PathVariable Long id, @PathVariable Long idColumn) {
@@ -128,8 +127,8 @@ public class TaskController {
     @PatchMapping("/{id}/completionDate")
     public ResponseEntity<?> setCompletionDate(@PathVariable Long id, @RequestBody LocalDate completionDate) {
         try {
-            Task updatedTask = taskService.setCompletionDate(id, completionDate);
-            return ResponseEntity.ok(updatedTask);
+            taskService.setCompletionDate(id, completionDate);
+            return ResponseEntity.ok().build();
         } catch (TaskNotFoundException e) {
             ErrorResponseDTO error = new ErrorResponseDTO("Task not found", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);

@@ -78,4 +78,51 @@ public class AuthService {
                 "USER"
         );
     }
+
+    public AuthResponseDTO checkTokenStatus(String token) {
+        // Verificar si el token está presente
+        if (token == null || token.trim().isEmpty()) {
+            throw new RuntimeException("No token provided");
+        }
+
+        String cleanToken = token.trim();
+        
+        // Extraer información del token
+        String username;
+        try {
+            username = jwtService.extractUsername(cleanToken);
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid token format");
+        }
+        
+        if (username == null || username.trim().isEmpty()) {
+            throw new RuntimeException("Invalid token - no username found");
+        }
+
+        // Buscar el usuario directamente en la base de datos
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        
+        // Validar que el token sea válido para este usuario
+        try {
+            if (!jwtService.isTokenValid(cleanToken, user)) {
+                throw new RuntimeException("Token is invalid or expired");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Token validation failed");
+        }
+
+        // Generar un nuevo token (opcional - para renovar la sesión)
+        String newToken = jwtService.generateToken(user);
+        
+        // Crear la respuesta completa con toda la información del usuario
+        return new AuthResponseDTO(
+            newToken,
+            user.getId(),
+            user.getUsername(),
+            user.getEmail(),
+            user.getFullName(),
+            "USER"
+        );
+    }
 }

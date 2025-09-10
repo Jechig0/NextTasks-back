@@ -27,8 +27,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/login", "/auth/register").permitAll()
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll() // Para testing con H2
-                        .requestMatchers("/error").permitAll() // Permitir endpoint de error
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

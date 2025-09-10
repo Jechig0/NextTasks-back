@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.nextTasks.exception.BoardExistentException;
 import com.nextTasks.exception.BoardNotFoundException;
 import com.nextTasks.model.Board;
 import com.nextTasks.model.User;
@@ -25,17 +24,15 @@ public class BoardService {
     private UserRepository userRepository;
 
     public List<Board> getBoardsByOwnerId(Long id){
-        return boardRepository.findByOwnerId(id);
+        return boardRepository.findByOwnerIdAndActive(id, true);
     }
 
     public Board getBoardById(Long id) {
-        return boardRepository.findById(id).orElseThrow(() -> new BoardNotFoundException("Board not found with id: " + id));
+        return boardRepository.findByIdAndActive(id, true).orElseThrow(() -> new BoardNotFoundException("Board not found with id: " + id));
     }
 
     public Board createBoard(Board board){
-        // if (boardRepository.findById(board.getId()).isPresent()) {
-        //     throw new BoardExistentException("Board already exists with id: " + board.getId());
-        // }
+        
 
         if(board.getOwner() != null && board.getOwner().getId() != null){
             // Lazy loading - Cargar el owner completo desde la base de datos
@@ -47,8 +44,7 @@ public class BoardService {
     }
 
     public Board updateBoard(Long id, Board newBoard) {
-        Board existingBoard = boardRepository.findById(id)
-            .orElseThrow(() -> new BoardNotFoundException("Board not found with id: " + id));
+        Board existingBoard = getBoardById(id);
 
         existingBoard.setName(newBoard.getName());
         existingBoard.setDescription(newBoard.getDescription());
@@ -58,10 +54,9 @@ public class BoardService {
     }
 
     public void deleteBoard(Long id) {
-        if (!boardRepository.existsById(id)) {
-            throw new BoardNotFoundException("Board not found with id: " + id);
-        }
-        boardRepository.deleteById(id);
+        Board existingBoard = getBoardById(id);
+        existingBoard.setActive(false);
+        boardRepository.save(existingBoard);
     }
 
 }

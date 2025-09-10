@@ -80,7 +80,7 @@ public class BoardController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @PutMapping("/inactive/{id}")
     public ResponseEntity<?> deleteBoard(@PathVariable Long id){
         try{
             boardService.deleteBoard(id);

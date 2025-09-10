@@ -90,6 +90,27 @@ public class TaskController {
         }
     }
 
+
+    @PutMapping("/{id}/column/{idColumn}")
+    public ResponseEntity<?> updateColumnTask(@PathVariable Long id, @PathVariable Long idColumn) {
+        try {
+            Task updatedTask = taskService.updateColumnTask(id, idColumn);
+            return ResponseEntity.ok(updatedTask);
+        } catch (TaskNotFoundException e) {
+            ErrorResponseDTO error = new ErrorResponseDTO("Task not found", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        } catch (TaskExistException e) {
+            ErrorResponseDTO error = new ErrorResponseDTO("Task already exists", e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+        } catch (ColumnNotFoundException e) {
+            ErrorResponseDTO error = new ErrorResponseDTO("Column not found", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        } catch (Exception e) {
+            ErrorResponseDTO error = new ErrorResponseDTO("Error updating task", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTask(@PathVariable Long id) {
         try {

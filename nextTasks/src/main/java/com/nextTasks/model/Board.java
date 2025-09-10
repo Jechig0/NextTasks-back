@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,9 @@ public class Board {
     private String name;
     private String description;
     private String colorCode;
+
+    @Builder.Default
+    private Boolean active = true;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)

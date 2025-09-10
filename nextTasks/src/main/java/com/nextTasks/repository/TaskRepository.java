@@ -26,6 +26,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Optional<Task> findByColumnIdAndTitle(Long id, String title);
 
-    
+    // Buscar tareas por owner ID del board
+    List<Task> findByColumnBoardOwnerId(Long ownerId);
 
 }

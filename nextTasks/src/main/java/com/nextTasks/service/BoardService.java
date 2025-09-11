@@ -7,8 +7,12 @@ import org.springframework.stereotype.Service;
 
 import com.nextTasks.exception.BoardNotFoundException;
 import com.nextTasks.model.Board;
+import com.nextTasks.model.Column;
+import com.nextTasks.model.Task;
 import com.nextTasks.model.User;
 import com.nextTasks.repository.BoardRepository;
+import com.nextTasks.repository.ColumnRepository;
+import com.nextTasks.repository.TaskRepository;
 import com.nextTasks.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -19,6 +23,12 @@ public class BoardService {
     
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private ColumnRepository columnRepository;
+
+    @Autowired
+    private TaskRepository taskRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -57,6 +67,15 @@ public class BoardService {
         Board existingBoard = getBoardById(id);
         existingBoard.setActive(false);
         boardRepository.save(existingBoard);
+
+        List<Column> columns = columnRepository.findByBoardId(id);
+
+        for(Column column : columns){
+            List<Task> tasks = taskRepository.findByColumnId(column.getId());
+            taskRepository.deleteAll(tasks);
+        }
+
+        columnRepository.deleteAll(columns);
     }
 
 }

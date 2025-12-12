@@ -44,3 +44,54 @@ Este proyecto demuestra habilidades en desarrollo backend moderno con buenas pr�
 
 ## 📌 Estructura del proyecto (modelo típico)
 
+├── main
+│ ├── java
+│ │ └── com/tu/paquete
+│ │ ├── controller # Endpoints REST
+│ │ ├── service # Lógica de negocio
+│ │ ├── repository # Persistencia
+│ │ ├── model # Entidades / DTOs
+│ │ └── config # Configuración Spring
+│ └── resources
+│ ├── application.yml # Configuraciones
+│ └── ...
+
+
+---
+
+## 📘 Endpoints principales
+
+> Aquí deberías documentar tus rutas REST más importantes. Ejemplos:
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/api/boards` | Lista todos los tableros |
+| POST | `/api/tasks` | Crea una nueva tarea |
+| PUT | `/api/tasks/{id}` | Actualiza una tarea |
+| DELETE | `/api/boards/{id}` | Elimina un tablero |
+
+*(Reemplaza con tus rutas reales según tu código.)*
+
+---
+
+## 🛠️ Cómo ejecutar localmente
+
+### Requisitos
+- Java 17+  
+- Maven o Gradle  
+- Base de datos configurada (Oracle/MySQL/MongoDB)
+
+### Pasos
+# 1. Clona el repositorio  
+
+git clone https://github.com/Jechig0/NextTasks-back.git
+
+# Configura tu base de datos en application.yml o application.properties
+
+# Ejecuta la API
+mvn spring-boot:run
+# o con Gradle
+gradle bootRun
+
+Accede a la API en:
+http://localhost:8080
